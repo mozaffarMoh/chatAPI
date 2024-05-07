@@ -1,2 +1,0 @@
-
-mongodb+srv://fff:fff@fff.ar7sepl.mongodb.net/?retryWrites=true&w=majority&appName=fff
