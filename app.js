@@ -7,11 +7,9 @@ app.use(express.json());
 mongoose
   .connect(
     "mongodb+srv://fff:fff@fff.ar7sepl.mongodb.net/?retryWrites=true&w=majority&appName=fff"
-  )
-  .then(() => {
+  ).then(() => {
     console.log("connect to MongoDB has been successful");
-  })
-  .catch((err) => {
+  }).catch((err) => {
     console.log("connect to MongoDB fail", err);
   });
 
