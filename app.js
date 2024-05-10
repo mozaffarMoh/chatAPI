@@ -1,19 +1,18 @@
 const express = require("express");
 const mongoose = require("mongoose");
+require("dotenv").config();
 const app = express();
 app.use(express.json());
 
 const Article = require("./models/atricle");
 
 mongoose
-  .connect(
-    "mongodb+srv://fff:fff@fff.ar7sepl.mongodb.net/?retryWrites=true&w=majority&appName=fff"
-  )
+  .connect(process.env.MONGO_URL)
   .then(() => {
-    console.log("connect to MongoDB has been successful");
+    console.log("success");
   })
   .catch((err) => {
-    console.log("connect to MongoDB fail", err);
+    console.log("error : ");
   });
 
 app.post("/create-article", async (req, res) => {
