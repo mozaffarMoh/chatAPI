@@ -22,10 +22,14 @@ router.post("/", async (req, res) => {
       email,
       password: hashedPassword,
     });
-    
+
     // Create and send JWT token
-    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' }); // Customize token payload and expiration
-    return res.status(201).json({ message: "Registration successful", token }); // Send token in response
+    const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    }); // Customize token payload and expiration
+    return res
+      .status(201)
+      .json({ message: "Registration successful", token, userId: newUser._id }); // Send token in response
   } catch (err) {
     return res.status(500).send({ message: err.message });
   }

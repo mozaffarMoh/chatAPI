@@ -29,7 +29,9 @@ router.post("/", async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
-    return res.status(200).json({ message: "Login success", token });
+    return res
+      .status(200)
+      .json({ message: "Login success", token, userId: existingUser._id });
   } catch (err) {
     return res.status(500).send({ message: err.message });
   }
