@@ -17,10 +17,12 @@ mongoose
 const registerRoute = require("./routes/register");
 const loginRoute = require("./routes/login");
 const usersRoute = require("./routes/users");
+const messagesRoute = require("./routes/messages");
 
 app.use("/register", registerRoute);
 app.use("/login", loginRoute);
 app.use("/users", usersRoute);
+app.use("/messages", messagesRoute);
 
 app.listen(3000, () => {
   console.log("I am listening to PORT 3000");
