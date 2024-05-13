@@ -6,9 +6,12 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 const http = require("http");
-const socketIo = require("socket.io");
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+  },
+});
 
 io.on("connection", (socket) => {
   // Handle incoming messages
