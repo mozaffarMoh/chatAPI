@@ -5,6 +5,24 @@ const cors = require("cors");
 const app = express();
 app.use(express.json());
 app.use(cors());
+const http = require("http");
+const socketIo = require("socket.io");
+const server = http.createServer(app);
+const io = socketIo(server);
+
+io.on("connection", (socket) => {
+  // Handle incoming messages
+  socket.on("message", (message) => {
+    console.log("Message received:", message);
+
+    // Broadcast the message to all connected clients
+    io.emit("message", message);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("Client disconnected");
+  });
+});
 
 mongoose
   .connect(process.env.MONGO_URL)
