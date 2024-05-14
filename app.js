@@ -41,14 +41,13 @@ const registerRoute = require("./routes/register");
 const loginRoute = require("./routes/login");
 const usersRoute = require("./routes/users");
 const messagesRoute = require("./routes/messages");
-const { log } = require("console");
 
 app.use("/register", registerRoute);
 app.use("/login", loginRoute);
 app.use("/users", usersRoute);
 app.use("/messages", messagesRoute);
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 4000;
 httpServer.listen(PORT, () => {
   console.log(`Server is listening on PORT ${PORT}`);
 });
