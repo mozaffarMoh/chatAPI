@@ -11,7 +11,7 @@ const { Server } = require("socket.io");
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000", // frontend origin
+    origin: "https://mozaffarmoh.github.io", // frontend origin
     methods: ["GET", "POST"], // HTTP methods to allow
     allowedHeaders: ["my-custom-header"], // if you have custom headers
     credentials: true, // to allow cookies
