@@ -11,7 +11,7 @@ const { Server } = require("socket.io");
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "https://mozaffarmoh.github.io", // frontend origin
+    origin: "https://mozaffarmoh.github.io/ChatApp", // frontend origin
     methods: ["GET", "POST"], // HTTP methods to allow
     credentials: true, // to allow cookies
   },
