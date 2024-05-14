@@ -11,7 +11,7 @@ const { Server } = require("socket.io");
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "https://mozaffarmoh.github.io/ChatApp", // frontend origin
+    origin: process.env.FRONTEND_ORIGIN, // frontend origin
     methods: ["GET", "POST"], // HTTP methods to allow
     credentials: true, // to allow cookies
   },
@@ -48,6 +48,7 @@ app.use("/login", loginRoute);
 app.use("/users", usersRoute);
 app.use("/messages", messagesRoute);
 
-httpServer.listen(4000, () => {
-  console.log("I am listening to PORT 4000");
+const PORT = process.env.PORT || 4000;
+httpServer.listen(PORT, () => {
+  console.log(`Server is listening on PORT ${PORT}`);
 });
