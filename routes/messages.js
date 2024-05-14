@@ -36,6 +36,7 @@ async function sendMessage(req, res) {
       timestamp,
     });
     await newMessage.save();
+
     res.send("Message send success");
   } catch (err) {
     console.error(err);

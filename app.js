@@ -5,25 +5,27 @@ const cors = require("cors");
 const app = express();
 app.use(express.json());
 app.use(cors());
-const http = require("http");
-const server = http.createServer(app);
-const io = require("socket.io")(server, {
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
   cors: {
-    origin: "*",
+    origin: "http://localhost:3000", // frontend origin
+    methods: ["GET", "POST"], // HTTP methods to allow
+    allowedHeaders: ["my-custom-header"], // if you have custom headers
+    credentials: true, // to allow cookies
   },
 });
 
 io.on("connection", (socket) => {
-  // Handle incoming messages
-  socket.on("message", (message) => {
-    console.log("Message received:", message);
-
-    // Broadcast the message to all connected clients
-    io.emit("message", message);
+  console.log("socket connected");
+  socket.on("sendMessage", (receiverId) => {
+    io.emit("receiveMessage", receiverId);
   });
 
   socket.on("disconnect", () => {
-    console.log("Client disconnected");
+    console.log("socket disconnected");
   });
 });
 
@@ -40,12 +42,13 @@ const registerRoute = require("./routes/register");
 const loginRoute = require("./routes/login");
 const usersRoute = require("./routes/users");
 const messagesRoute = require("./routes/messages");
+const { log } = require("console");
 
 app.use("/register", registerRoute);
 app.use("/login", loginRoute);
 app.use("/users", usersRoute);
 app.use("/messages", messagesRoute);
 
-app.listen(3000, () => {
-  console.log("I am listening to PORT 3000");
+httpServer.listen(4000, () => {
+  console.log("I am listening to PORT 4000");
 });
