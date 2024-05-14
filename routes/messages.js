@@ -2,23 +2,34 @@ const express = require("express");
 const MessageBox = require("../models/MessageBox");
 const authenticateToken = require("../middleware/isAuth");
 
-/* Get all Messages */
+/* Get all Messages with Pagination */
 async function getAllMessages(req, res) {
   const senderID = req.params.senderID;
   const receiverID = req.params.receiverID;
+  const limit = parseInt(req.query.limit) || 10; // Default to 10 messages per page if not provided
+  const lastID = req.query.lastID || null; // ID of the last message from the previous page
 
   try {
-    const messages = await MessageBox.find({
+    // Base query to match sender and receiver
+    let query = {
       $or: [
         { sender: senderID, receiver: receiverID },
-        {
-          sender: receiverID,
-          receiver: senderID,
-        },
+        { sender: receiverID, receiver: senderID },
       ],
-    });
+    };
 
-    res.json(messages);
+    // If lastID is provided, add it to the query to get messages after this ID
+    if (lastID) {
+      query._id = { $lt: lastID };
+    }
+
+    const messages = await MessageBox.find(query)
+      .sort({ _id: -1 }) // Sort by _id in descending order
+      .limit(limit);
+
+    const reversedMessages = messages.reverse();
+
+    res.json(reversedMessages);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Internal Server Error" });
