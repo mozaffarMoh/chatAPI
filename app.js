@@ -13,7 +13,6 @@ const io = new Server(httpServer, {
   cors: {
     origin: "https://mozaffarmoh.github.io", // frontend origin
     methods: ["GET", "POST"], // HTTP methods to allow
-    allowedHeaders: ["my-custom-header"], // if you have custom headers
     credentials: true, // to allow cookies
   },
 });
