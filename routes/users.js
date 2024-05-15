@@ -1,8 +1,6 @@
 const express = require("express");
 const Users = require("../models/Users");
 const authenticateToken = require("../middleware/isAuth");
-const multer = require("multer");
-const path = require("path");
 
 /* Get all users */
 async function getAllUsers(req, res) {
