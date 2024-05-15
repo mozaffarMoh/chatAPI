@@ -6,8 +6,8 @@ const authenticateToken = require("../middleware/isAuth");
 async function getAllMessages(req, res) {
   const senderID = req.params.senderID;
   const receiverID = req.params.receiverID;
-  const limit = parseInt(req.query.limit) || 10; // Default to 10 messages per page if not provided
-  const lastID = req.query.lastID || null; // ID of the last message from the previous page
+  const page = parseInt(req.query.page) || 1; // Page number, default is 1 if not provided
+  const limit = 10; // Number of messages per page
 
   try {
     // Base query to match sender and receiver
@@ -18,17 +18,16 @@ async function getAllMessages(req, res) {
       ],
     };
 
-    // If lastID is provided, add it to the query to get messages after this ID
-    if (lastID) {
-      query._id = { $lt: lastID };
-    }
+    // Calculate the number of documents to skip
+    const skip = (page - 1) * limit;
 
     const messages = await MessageBox.find(query)
       .sort({ _id: -1 }) // Sort by _id in descending order
+      .skip(skip)
       .limit(limit);
 
+    // Optional: Reverse the messages array if you want to maintain chronological order
     const reversedMessages = messages.reverse();
-
     res.json(reversedMessages);
   } catch (err) {
     console.error(err);
