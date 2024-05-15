@@ -23,11 +23,12 @@ router.post("/", async (req, res) => {
     if (!isPasswordMatched) {
       return res.status(400).send("Password is incorrect");
     }
+
     // Create and send JWT token
     const token = jwt.sign(
       { userId: existingUser._id },
       process.env.JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: "2h" }
     );
     return res
       .status(200)
