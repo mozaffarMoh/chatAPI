@@ -18,13 +18,12 @@ async function getAllMessages(req, res) {
       ],
     };
 
-    // Calculate the number of documents to skip
-    const skip = (page - 1) * limit;
+    // Calculate the number of documents to limit
+    const limitDocs = page * limit;
 
     const messages = await MessageBox.find(query)
       .sort({ _id: -1 }) // Sort by _id in descending order
-      .skip(skip)
-      .limit(limit);
+      .limit(limitDocs);
 
     // Optional: Reverse the messages array if you want to maintain chronological order
     const reversedMessages = messages.reverse();

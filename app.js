@@ -48,7 +48,7 @@ app.use("/users", usersRoute);
 app.use("/messages", messagesRoute);
 
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT;
 httpServer.listen(PORT, () => {
   console.log(`Server is listening on PORT ${PORT}`);
 });
