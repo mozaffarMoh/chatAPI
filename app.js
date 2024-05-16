@@ -11,7 +11,7 @@ const { Server } = require("socket.io");
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.FRONTEND_ORIGIN, // frontend origin
+    origin: '*', // frontend origin
     methods: ["GET", "POST"], // HTTP methods to allow
     credentials: true, // to allow cookies
   },

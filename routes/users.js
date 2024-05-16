@@ -57,6 +57,11 @@ async function updateProfile(req, res) {
     );
 
     let updatedPassword = "";
+    if (oldPassword && !newPassword) {
+      return res.send("please enter new password");
+    } else if (!oldPassword && newPassword) {
+      return res.send("please enter old password");
+    }
     if (oldPassword) {
       if (!isPasswordMatched) {
         return res.status(402).send("old password is not correct");
@@ -65,7 +70,7 @@ async function updateProfile(req, res) {
       }
     }
 
-    const updatedPhoto = await Users.findOneAndUpdate(
+    const updatedProfile = await Users.findOneAndUpdate(
       { _id: userID },
       {
         profilePhoto: profilePhoto,
@@ -75,7 +80,7 @@ async function updateProfile(req, res) {
       { new: true }
     );
 
-    if (updatedPhoto) {
+    if (updatedProfile) {
       res.send("Update Profile Photo success");
     } else {
       res.status(404).json({ error: "Photo not found" });
