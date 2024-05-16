@@ -20,6 +20,7 @@ router.post("/", async (req, res) => {
       password,
       existingUser.password
     );
+    
     if (!isPasswordMatched) {
       return res.status(400).send("Password is incorrect");
     }

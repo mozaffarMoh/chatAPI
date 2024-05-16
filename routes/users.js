@@ -1,5 +1,6 @@
 const express = require("express");
 const Users = require("../models/Users");
+const bcrypt = require("bcryptjs");
 const authenticateToken = require("../middleware/isAuth");
 
 /* Get all users */
@@ -43,14 +44,34 @@ async function deleteUser(req, res) {
   }
 }
 
-/* Update Profile Photo */
-async function updateProfilePhoto(req, res) {
+/* Update Profile */
+async function updateProfile(req, res) {
   const userID = req.params.userID;
-  const { profilePhoto } = req.body;
+  const { profilePhoto, username, oldPassword, newPassword } = req.body;
   try {
+    const existingUser = await Users.findOne({ _id: userID });
+
+    const isPasswordMatched = await bcrypt.compare(
+      oldPassword,
+      existingUser?.password
+    );
+
+    let updatedPassword = "";
+    if (oldPassword) {
+      if (!isPasswordMatched) {
+        return res.status(402).send("old password is not correct");
+      } else {
+        updatedPassword = await bcrypt.hash(newPassword, 10);
+      }
+    }
+
     const updatedPhoto = await Users.findOneAndUpdate(
       { _id: userID },
-      { profilePhoto: profilePhoto },
+      {
+        profilePhoto: profilePhoto,
+        username: username,
+        password: updatedPassword ? updatedPassword : existingUser.password,
+      },
       { new: true }
     );
 
@@ -90,7 +111,7 @@ const router = express.Router();
 router.get("/", authenticateToken, getAllUsers);
 router.get("/:userID", authenticateToken, getOneUser);
 router.delete("/:userID", authenticateToken, deleteUser);
-router.put("/profile-photo/:userID", authenticateToken, updateProfilePhoto);
+router.put("/update-profile/:userID", authenticateToken, updateProfile);
 router.get("/update-users/update", authenticateToken, updateUsers);
 
 module.exports = router;
