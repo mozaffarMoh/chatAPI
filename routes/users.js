@@ -58,9 +58,9 @@ async function updateProfile(req, res) {
 
     let updatedPassword = "";
     if (oldPassword && !newPassword) {
-      return res.send("please enter new password");
+      return res.status(402).send("please enter new password");
     } else if (!oldPassword && newPassword) {
-      return res.send("please enter old password");
+      return res.status(402).send("please enter old password");
     }
     if (oldPassword) {
       if (!isPasswordMatched) {
