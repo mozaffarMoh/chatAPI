@@ -3,15 +3,27 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const cors = require("cors");
 const app = express();
-app.use(express.json());
 app.use(cors());
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 
+const bodyParserLimit = '133kb'; 
+app.use(express.json({ limit: bodyParserLimit }));
+app.use(express.urlencoded({ limit: bodyParserLimit, extended: true }));
+// Error handling middleware for payload too large
+app.use((err, req, res, next) => {
+  if (err.status === 413) {
+    return res
+      .status(413)
+      .send("Image too large. Please upload an image smaller than 100KB.");
+  }
+  next(err);
+});
+
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: '*', // frontend origin
+    origin: "*", // frontend origin
     methods: ["GET", "POST"], // HTTP methods to allow
     credentials: true, // to allow cookies
   },
@@ -46,7 +58,6 @@ app.use("/register", registerRoute);
 app.use("/login", loginRoute);
 app.use("/users", usersRoute);
 app.use("/messages", messagesRoute);
-
 
 const PORT = process.env.PORT;
 httpServer.listen(PORT, () => {
