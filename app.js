@@ -7,7 +7,7 @@ app.use(cors());
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 
-const bodyParserLimit = '133kb'; 
+const bodyParserLimit = "133kb";
 app.use(express.json({ limit: bodyParserLimit }));
 app.use(express.urlencoded({ limit: bodyParserLimit, extended: true }));
 // Error handling middleware for payload too large
@@ -31,12 +31,27 @@ const io = new Server(httpServer, {
 
 io.on("connection", (socket) => {
   console.log("socket connected");
+  socket.emit("me", socket.id);
+
   socket.on("sendMessage", (receiverId) => {
     io.emit("receiveMessage", receiverId);
   });
 
   socket.on("disconnect", () => {
     console.log("socket disconnected");
+  });
+
+  socket.on("callUser", (data) => {
+    io.emit("callUser", {
+      userToCall: data.userToCall,
+      signal: data.signalData,
+      from: data.from,
+      name: data.name,
+    });
+  });
+
+  socket.on("answerCall", (data) => {
+    io.emit("callAccepted", data);
   });
 });
 
@@ -53,6 +68,7 @@ const registerRoute = require("./routes/register");
 const loginRoute = require("./routes/login");
 const usersRoute = require("./routes/users");
 const messagesRoute = require("./routes/messages");
+const { log } = require("console");
 
 app.use("/register", registerRoute);
 app.use("/login", loginRoute);
