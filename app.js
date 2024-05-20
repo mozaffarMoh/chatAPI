@@ -53,6 +53,10 @@ io.on("connection", (socket) => {
   socket.on("answerCall", (data) => {
     io.emit("callAccepted", data);
   });
+
+  socket.on("leaveCall", () => {
+    io.emit("leaveCall");
+  });
 });
 
 mongoose
