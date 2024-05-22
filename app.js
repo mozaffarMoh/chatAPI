@@ -43,6 +43,8 @@ io.on("connection", (socket) => {
 
   socket.on("callUser", (data) => {
     io.emit("callUser", {
+      voice: data.voice,
+      video: data.video,
       userToCall: data.userToCall,
       signal: data.signalData,
       from: data.from,
