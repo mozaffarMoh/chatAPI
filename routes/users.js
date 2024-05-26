@@ -1,5 +1,6 @@
 const express = require("express");
 const Users = require("../models/Users");
+const MessageBox = require("../models/MessageBox");
 const bcrypt = require("bcryptjs");
 const authenticateToken = require("../middleware/isAuth");
 
@@ -37,6 +38,9 @@ async function deleteUser(req, res) {
     if (!deletedUser) {
       return res.status(404).json({ error: "User not found" });
     }
+    await MessageBox.deleteMany({
+      sender: id,
+    });
     res.send("delete success");
   } catch (err) {
     console.log(err);

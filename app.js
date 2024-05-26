@@ -72,12 +72,13 @@ mongoose
 
 const registerRoute = require("./routes/register");
 const loginRoute = require("./routes/login");
+const logoutRoute = require("./routes/logout");
 const usersRoute = require("./routes/users");
 const messagesRoute = require("./routes/messages");
-const { log } = require("console");
 
 app.use("/register", registerRoute);
 app.use("/login", loginRoute);
+app.use("/logout", logoutRoute);
 app.use("/users", usersRoute);
 app.use("/messages", messagesRoute);
 
