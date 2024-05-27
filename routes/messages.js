@@ -1,18 +1,6 @@
 const express = require("express");
 const MessageBox = require("../models/MessageBox");
 const authenticateToken = require("../middleware/isAuth");
-const { format, isToday, isYesterday } = require("date-fns");
-
-/* Format the time */
-function formatTimestamp(date) {
-  if (isToday(date)) {
-    return format(date, "hh:mm a");
-  } else if (isYesterday(date)) {
-    return "Yesterday";
-  } else {
-    return format(date, "MM/dd/yyyy hh:mm a");
-  }
-}
 
 /* Get all Messages with Pagination */
 async function getAllMessages(req, res) {
@@ -37,12 +25,9 @@ async function getAllMessages(req, res) {
       .sort({ _id: -1 }) // Sort by _id in descending order
       .limit(limitDocs);
 
-    const formattedMessages = messages.reverse().map((message) => ({
-      ...message._doc,
-      timestamp: formatTimestamp(message.timestamp),
-    }));
+    const reversedMessage = messages.reverse();
 
-    res.json(formattedMessages);
+    res.json(reversedMessage);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Internal Server Error" });
@@ -51,7 +36,7 @@ async function getAllMessages(req, res) {
 
 /* Send message */
 async function sendMessage(req, res) {
-  const { message, sender, receiver, timestamp } = req.body;
+  const { message, sender, receiver } = req.body;
   try {
     const newMessage = new MessageBox({
       message,
